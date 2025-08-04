@@ -1,0 +1,26 @@
+# Nginx SSL configuration hardening
+server {
+    listen 443 ssl http2;
+    server_name api.bank.com;
+    
+    # Strong SSL configuration
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/private.key;
+    
+    # Force TLS 1.3 only
+    ssl_protocols TLSv1.3;
+    
+    # Strong cipher suites
+    ssl_ciphers TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
+    ssl_prefer_server_ciphers off;
+    
+    # HSTS enforcement
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    
+    # Certificate transparency
+    ssl_ct on;
+    
+    # OCSP stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+}
