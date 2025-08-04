@@ -1,0 +1,13 @@
+-- Create dedicated database user with minimal privileges
+CREATE USER 'banking_app'@'localhost' IDENTIFIED BY 'complex_password_here';
+
+-- Grant only necessary permissions
+GRANT SELECT, INSERT, UPDATE ON banking.transactions TO 'banking_app'@'localhost';
+GRANT SELECT ON banking.accounts TO 'banking_app'@'localhost';
+
+-- Revoke dangerous permissions
+REVOKE ALL PRIVILEGES ON banking.* FROM 'banking_app'@'localhost';
+
+-- Enable query logging for monitoring
+SET GLOBAL general_log = 'ON';
+SET GLOBAL log_output = 'FILE';
