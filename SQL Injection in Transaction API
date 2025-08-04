@@ -1,0 +1,22 @@
+# Secure database query implementation
+def get_transaction_history(user_id, account_id):
+    """Parameterized query implementation"""
+    
+    # Input validation
+    if not validate_user_id(user_id) or not validate_account_id(account_id):
+        raise ValidationError("Invalid input parameters")
+    
+    # Verify user owns account
+    if not verify_account_ownership(user_id, account_id):
+        raise AuthorizationError("Access denied")
+    
+    # Parameterized query
+    query = """
+        SELECT transaction_id, amount, transaction_date, description
+        FROM transactions 
+        WHERE account_id = %s AND user_id = %s
+        ORDER BY transaction_date DESC
+        LIMIT 100
+    """
+    
+    return execute_query(query, (account_id, user_id))
